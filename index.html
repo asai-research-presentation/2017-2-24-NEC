@@ -1,0 +1,2004 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Classical Planning in Deep Latent Space</title>
+<!-- 2017-03-16 木 14:40 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Masataro Asai" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="css/layout.css" />
+<link rel="stylesheet" type="text/css" href="css/default.css" />
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery.loupe.min.js"></script>
+<script type="text/javascript" src="js/jgestures/jgestures.min.js"></script>
+<script type="text/javascript" src="js/code.js"></script>
+<script type="text/javascript" src="MathJax/MathJax.js"></script>
+<script type="text/javascript" src="js/mathjaxconf.js"></script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/javascript" src="http://orgmode.org/mathjax/MathJax.js"></script>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+    MathJax.Hub.Config({
+        // Only one of the two following lines, depending on user settings
+        // First allows browser-native MathML display, second forces HTML/CSS
+        //  config: ["MMLorHTML.js"], jax: ["input/TeX"],
+            jax: ["input/TeX", "output/HTML-CSS"],
+        extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js",
+                     "TeX/noUndefined.js"],
+        tex2jax: {
+            inlineMath: [ ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"], ["\\begin{displaymath}","\\end{displaymath}"] ],
+            skipTags: ["script","noscript","style","textarea","pre","code"],
+            ignoreClass: "tex2jax_ignore",
+            processEscapes: false,
+            processEnvironments: true,
+            preview: "TeX"
+        },
+        showProcessingMessages: true,
+        displayAlign: "center",
+        displayIndent: "2em",
+
+        "HTML-CSS": {
+             scale: 100,
+             availableFonts: ["STIX","TeX"],
+             preferredFont: "TeX",
+             webFont: "TeX",
+             imageFont: "TeX",
+             showMathMenu: true,
+        },
+        MMLorHTML: {
+             prefer: {
+                 MSIE:    "MML",
+                 Firefox: "MML",
+                 Opera:   "HTML",
+                 other:   "HTML"
+             }
+        }
+    });
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Classical Planning in Deep Latent Space</h1>
+<div class="outline-text-1">
+<div class="center">
+<p>
+東京大学大学院 博士2年
+</p>
+
+<p>
+総合文化研究科　(渋谷駒場キャンパス)
+</p>
+
+<p>
+学振DC2
+</p>
+
+<p>
+浅井 政太郎
+</p>
+</div>
+
+<div class="note">
+<div class="alignright">
+<p>
+Made by guicho2.71828 (Masataro Asai)
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> もくじ</h2>
+<div class="outline-text-2" id="text-1">
+<ul class="org-ul">
+<li>Background &#x2013; 専攻分野 &#x2013; AIプランニング
+</li>
+<li>CV
+</li>
+<li>IJCAI投稿論文 &#x2013; 深層学習 + AIプランニング
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> イントロ &#x2013; 専攻分野 &#x2013; AIプランニング</h2>
+<div class="outline-text-2" id="text-2">
+<div class="container-fluid">
+<div class="row-fluid">
+<div class="span6">
+
+<div class="figure">
+<p><img src="img/astro/1.png" alt="1.png" />
+</p>
+</div>
+
+</div>
+<div class="span6">
+
+<div class="figure">
+<p><img src="img/rescue/1.png" alt="1.png" />
+</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+<div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> 誰?</h3>
+<div class="outline-text-3" id="text-2-1">
+<div class="container-fluid">
+<div class="row-fluid">
+<div class="span6">
+
+<div class="figure">
+<p><img src="img/astro/1.png" alt="1.png" />
+</p>
+</div>
+
+</div>
+<div class="span6">
+
+<div class="figure">
+<p><img src="img/rescue/1.png" alt="1.png" />
+</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="resume">
+<p>
+And let me introduce these robots.
+The guy in the left is Astro boy.
+</p>
+
+</div>
+</div>
+
+<div id="outline-container-sec-2-1-1" class="outline-4">
+<h4 id="sec-2-1-1"><span class="section-number-4">2.1.1</span> 誰?</h4>
+<div class="outline-text-4" id="text-2-1-1">
+<div class="container-fluid">
+<div class="row-fluid">
+<div class="span6">
+
+<div class="figure">
+<p><img src="img/astro/2.png" alt="2.png" />
+</p>
+</div>
+
+</div>
+<div class="span6">
+
+<div class="figure">
+<p><img src="img/rescue/1.png" alt="1.png" />
+</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="resume">
+<p>
+As you know, he is a famous manga superhero invented by Tezuka Osamu in 50s,
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-1-2" class="outline-4">
+<h4 id="sec-2-1-2"><span class="section-number-4">2.1.2</span> 誰?</h4>
+<div class="outline-text-4" id="text-2-1-2">
+<div class="container-fluid">
+<div class="row-fluid">
+<div class="span6">
+
+<div class="figure">
+<p><img src="img/astro/final.png" alt="final.png" />
+</p>
+</div>
+
+</div>
+<div class="span6">
+
+<div class="figure">
+<p><img src="img/rescue/1.png" alt="1.png" />
+</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="resume">
+<p>
+and he can think, hear, speak, act. he also has emotions.
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-1-3" class="outline-4">
+<h4 id="sec-2-1-3"><span class="section-number-4">2.1.3</span> 誰?</h4>
+<div class="outline-text-4" id="text-2-1-3">
+<div class="container-fluid">
+<div class="row-fluid">
+<div class="span6">
+
+<div class="figure">
+<p><img src="img/astro/final.png" alt="final.png" />
+</p>
+</div>
+
+</div>
+<div class="span6">
+
+<div class="figure">
+<p><img src="img/rescue/2.png" alt="2.png" />
+</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="resume">
+<p>
+In contrast, the guy in the right is a real robot that is actually in use @ fukuoka prefecture for the rescue purpose..
+His name is T-52 Enryu, developped by a Japanese company Temzak.
+He is huge and powerful &#x2013; about 4 meters in height and can carry things which is as heavy as 500kg.
+Well, so, in a sense, he is also a superhero in the real disastrous situation.
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-1-4" class="outline-4">
+<h4 id="sec-2-1-4"><span class="section-number-4">2.1.4</span> 誰?</h4>
+<div class="outline-text-4" id="text-2-1-4">
+<div class="container-fluid">
+<div class="row-fluid">
+<div class="span6">
+
+<div class="figure">
+<p><img src="img/astro/final.png" alt="final.png" />
+</p>
+</div>
+
+</div>
+<div class="span6">
+
+<div class="figure">
+<p><img src="img/rescue/3.png" alt="3.png" />
+</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="resume">
+<p>
+But does he have feelings or can he think? Can he even move around by his own?
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-1-5" class="outline-4">
+<h4 id="sec-2-1-5"><span class="section-number-4">2.1.5</span> 誰?</h4>
+<div class="outline-text-4" id="text-2-1-5">
+<div class="container-fluid">
+<div class="row-fluid">
+<div class="span6">
+
+<div class="figure">
+<p><img src="img/astro/final.png" alt="final.png" />
+</p>
+</div>
+
+</div>
+<div class="span6">
+
+<div class="figure">
+<p><img src="img/rescue/final.png" alt="final.png" />
+</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="resume">
+<p>
+No. It requires full human intervention &#x2014; it is indeed operated by a
+driver who gets in or by a remote control. It is more like a
+super-sophisticated shovel car.
+</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> 実際の大規模災害では非実用的 &#x2014; 操縦士が足りない!</h3>
+<div class="outline-text-3" id="text-2-2">
+<div class="container-fluid">
+<div class="row-fluid">
+<div class="span2">
+<p>
+<img src="img/rescue.png" alt="rescue.png" />
+<img src="img/rescue.png" alt="rescue.png" />
+<img src="img/rescue.png" alt="rescue.png" />
+<img src="img/silent.png" alt="silent.png" />
+</p>
+
+</div>
+<div class="span10">
+
+<div class="figure">
+<p><img src="img/static/tsunami.jpg" alt="tsunami.jpg" />
+</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="larger">
+<div class="alignright">
+<ul class="org-ul">
+<li>そのままでは役に立たない!
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div class="resume">
+<p>
+Now the problem is : It's ok in small accidents but is impractical in the real, massive 
+natural disaster which frequently occurs in Japan.
+The key resource is human &#x2014;
+These special purpose vehicles require human intervention,
+thus they are useless without trained operators.
+</p>
+
+</div>
+</div>
+
+<div id="outline-container-sec-2-2-1" class="outline-4">
+<h4 id="sec-2-2-1"><span class="section-number-4">2.2.1</span> 操縦士を増やせない &#x2013; Human Resource and Training</h4>
+<div class="outline-text-4" id="text-2-2-1">
+<div class="container-fluid">
+<div class="row-fluid">
+<div class="span4">
+
+<div class="figure">
+<p><img src="img/rescue/1.png" alt="1.png" />
+</p>
+</div>
+
+</div>
+<div class="span8">
+<p>
+
+</p>
+
+<dl class="org-dl">
+<dt> ✘ <i>時間</i> がかかる </dt><dd>訓練に ＞100時間, <b>必要な時だけ増やす</b> のは不可能
+</dd>
+<dt> ✘ <i>￥￥￥￥</i> がかかる </dt><dd>訓練官、訓練場所、訓練用具
+</dd>
+<dt> ✘ 技術は <i>維持が重要</i> </dt><dd>定期的な再訓練、長期的コスト、さらなるマニー
+</dd>
+<dt> ✘ 平時は <i>無駄</i> な技術 </dt><dd>普段は意味がない &#x2013; 無駄なマニー!
+</dd>
+</dl>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="resume">
+<p>
+In a natural disaster, we need as many experienced operators as possible.
+However, it is virtually impossible due to several reasons. 
+</p>
+
+<p>
+First, training takes time.
+It is impossible to quickly increase the number of operators as needed, at the time of disaster.
+</p>
+
+<p>
+Second, the money matters.
+Training a person costs a lot of money, including: the cost of maintaining
+a training center, the cost of additional vehicles for training, the cost
+of training the trainers, wages for trainers, etc.
+</p>
+
+<p>
+Third, Skills need to be updated and maintained.
+You know, how about preparing the large number of operators in advance?
+No, the society cannot torelate the cost of keep training them.
+Operators may lose the skills and skills may become outdated.
+</p>
+
+<p>
+Finally, in a normal situation, those skills are useless.
+It forces the society to waste a great amount of extra money.
+</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-3" class="outline-3">
+<h3 id="sec-2-3"><span class="section-number-3">2.3</span> だからこそ: 自動プランナ Automated Planner</h3>
+<div class="outline-text-3" id="text-2-3">
+
+<div class="figure">
+<p><img src="img/planning/1.png" alt="1.png" />
+</p>
+</div>
+
+<div class="resume">
+<p>
+研究テーマのプランニングは、ロボットに、人間の助けを借りず、いかに自律して行動させるかを扱います。
+これをモデル化したプランニング問題は、具体的な行動の列を求める 組合せ最適化問題です。
+</p>
+
+<p>
+プランニング問題のタスクは、
+センサーから初期状態とゴールを受け取って、被災者を助ける正しい手順を出力することです。
+</p>
+
+<p>
+たとえば、この図では男性が瓦礫に埋まって助けを求めています。
+プランニング機能のあるロボットは、コレに対して「男性を助けよ」という大まかな指示を受けます。
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-4" class="outline-3">
+<h3 id="sec-2-4"><span class="section-number-3">2.4</span> だからこそ: 自動プランナ Automated Planner</h3>
+<div class="outline-text-3" id="text-2-4">
+
+<div class="figure">
+<p><img src="img/planning/2.png" alt="2.png" />
+</p>
+</div>
+
+<div class="resume">
+<p>
+指示の内容には、図のように初期状態とゴール、許可された行動のリストが入っています。
+ロボットは、自動プランニングにより、人間の代わりに適切な行動を組み立てて、ゴールを自動で達成します。
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-5" class="outline-3">
+<h3 id="sec-2-5"><span class="section-number-3">2.5</span> だからこそ: 自動プランナ Automated Planner</h3>
+<div class="outline-text-3" id="text-2-5">
+
+<div class="figure">
+<p><img src="img/planning/final.png" alt="final.png" />
+</p>
+</div>
+
+<div class="resume">
+<p>
+プランニングは汎用な枠組みなので、災害救助以外にも様々な問題に適用することができます。
+現実の応用例では「宇宙探査機運行問題」や「企業ネットワーク脆弱性問題」も表現できます。
+</p>
+
+<p>
+このように、プランニングは、難しい問題を汎用性を失わずに解くことを目指します。
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-6" class="outline-3">
+<h3 id="sec-2-6"><span class="section-number-3">2.6</span> AIと自動プランニング の位置づけ &#x2013; <i>理論</i> と <i>実応用</i> の中間</h3>
+<div class="outline-text-3" id="text-2-6">
+<p>
+緑は <i>理論</i> 、オレンジは <i>実応用</i> 、 AI はその橋渡し (どれともかぶらない部分もある)
+</p>
+
+<div class="resume">
+<p>
+Automated Planning is a branch of Aritificial Intelligence. 
+</p>
+
+<p>
+It shares a lot of technology with Operations Research and Theoretical
+Computer Science, and is considered a bridge between pure theory and
+pure applications.
+</p>
+
+</div>
+
+
+<div class="figure">
+<p><img src="img/planning2.png" alt="planning2.png" />
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> プランニング問題 (決定的,完全情報) &#x2013; Blocksworld</h2>
+<div class="outline-text-2" id="text-3">
+<embed src="img/plan.svg" type="image/svg+xml"  />
+</div>
+
+<div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> アクション = 条件付き状態遷移</h3>
+<div class="outline-text-3" id="text-3-1">
+<div class="center">
+<div class="xlarge">
+<p>
+アクション (move ?X ?Y)
+</p>
+
+</div>
+</div>
+
+<div class="center">
+<p>
+<b>?X</b>, <b>?Y</b> : 変数。 値 <b>BLOCK-A</b>, <b>BLOCK-B</b> などを適用して使う
+</p>
+
+<p>
+<b>前提条件</b> と <b>効果</b> で構成される
+</p>
+</div>
+<blockquote>
+<p>
+<b>前提条件</b> が満たされた時…
+</p>
+
+<p>
+命題 (clear <b>?X</b>) : 積み木 <b>?X</b> の上に何も置かれていない
+</p>
+
+<p>
+命題 (clear <b>?Y</b>) : 積み木 <b>?Y</b> の上に何も置かれていない
+</p>
+
+<p>
+<b>効果</b> を適用
+</p>
+
+<p>
+⇒ 命題 (on <b>?X</b> <b>?Y</b>) を追加 : <b>?X</b> が <b>?Y</b> の上に移動
+</p>
+
+<p>
+⇒ 命題 (clear <b>?Y</b>) を削除 : <b>?Y</b> は clear ではなくなる
+</p>
+</blockquote>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2"><span class="section-number-3">3.2</span> <b>PDDL</b> : Planning Domain Description Language</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+International Planning Competition で使われている入力形式
+</p>
+
+<div class="container-fluid">
+<div class="row-fluid">
+<div class="span2">
+<p>
+
+</p>
+
+</div>
+<div class="span8">
+<div class="org-src-container">
+
+<pre class="src src-lisp">(<span style="color: #483d8b;">:action</span> move
+ <span style="color: #483d8b;">:parameters</span> (?X ?Y)
+ <span style="color: #483d8b;">:preconditions</span>
+   (and (clear ?X)   <span style="color: #b22222;">; (1)</span>
+        (clear ?Y))  <span style="color: #b22222;">; (2)</span>
+
+ <span style="color: #483d8b;">:effect</span>
+   (and (on ?X ?Y)   <span style="color: #b22222;">; (3)</span>
+        (not         <span style="color: #b22222;">; (4)</span>
+         (clear ?Y))))
+</pre>
+</div>
+
+</div>
+<div class="span2">
+<p>
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="note">
+<p>
+宇宙探査機 NASA DS1 上の Remote Agent 自動航行システム でも
+ "DDL" という名で 似たような記述言語があったようだ
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-3" class="outline-3">
+<h3 id="sec-3-3"><span class="section-number-3">3.3</span> プランニング = グラフ探索</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+<b>ノード</b> : 状態 = 命題の集合 ⇒ <code>(on A B)</code>, <code>(clear A)</code> など
+</p>
+
+<p>
+<b>辺</b>     : アクション ⇒ <code>(move A B)</code> 等
+</p>
+
+
+<div class="figure">
+<p><img src="img/graph.png" alt="graph.png" />
+</p>
+</div>
+
+<div class="note">
+<p>
+*1 [Helmert, 2006] [Richter, 2010]
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-4" class="outline-3">
+<h3 id="sec-3-4"><span class="section-number-3">3.4</span> [一般向け] Q. はやりのDeep Learningとの違いは?</h3>
+<div class="outline-text-3" id="text-3-4">
+<p>
+A. レイヤが違う
+</p>
+
+<div class="container-fluid">
+<div class="row-fluid">
+<div class="span6">
+<p>
+<b>機械学習・Neural Networks</b> 
+</p>
+
+<p>
+for <b>認識・反射</b>
+</p>
+<ul class="org-ul">
+<li>入力 は <b>Subsymbolic</b> (連続値)
+
+<p>
+画像、音声、非構造化テキスト: 
+</p>
+</li>
+<li><b>直感/脊髄反射的知能</b>:
+
+<p>
+　 <b><span class="underline">直後</span> の行動の決定</b>
+</p>
+<div class="smaller">
+<p>
+<b>パブロフの犬</b> : 餌→よだれ
+</p>
+
+<p>
+<b>自動運転</b> : 赤信号,人 → 止まる.
+</p>
+
+<p>
+<b>翻訳</b> : 文章 → 文章
+</p>
+
+<p>
+<b>囲碁局面の評価関数</b> : 局面 → 勝率
+</p>
+
+</div>
+<p>
+☺ 効率よく 1-to-1 mapping
+</p>
+
+<p>
+☹ 単純作業
+</p>
+</li>
+</ul>
+
+</div>
+<div class="span6">
+<p>
+<b>推論・探索</b>
+</p>
+
+<p>
+for <b>プランニング・ゲーム・定理証明</b>
+</p>
+<ul class="org-ul">
+<li>入出力は <b>Symbolic</b>
+
+<p>
+論理 オブジェクト ルール
+</p>
+</li>
+<li><b>論理・推論による知能:</b>
+
+<p>
+　 <b><span class="underline">未来に渡る</span> 戦略の決定</b>
+</p>
+
+<p>
+　 (戦略 = 行動の <b>列や木</b>)
+</p>
+<div class="smaller">
+<p>
+<b>レスキューロボ</b> : ゴール = 被災者生存
+</p>
+
+<p>
+<b>証明器</b> : ゴール = QED
+</p>
+
+<p>
+<b>コンパイラ</b> : 命令列の生成
+</p>
+
+<p>
+<b>囲碁,将棋</b> : ゴール = 勝利
+</p>
+
+</div>
+<div class="larger">
+<p>
+☺ 時間的依存関係を含む論理の組み合わせ
+</p>
+
+</div>
+</li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+<ul class="org-ul">
+<li>AlphaGo = Subsymbolic (DLNNによる評価関数の学習) + Symbolic (UCT-MCTSによる探索)
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-3-5" class="outline-3">
+<h3 id="sec-3-5"><span class="section-number-3">3.5</span> 既存の有名システム</h3>
+<div class="outline-text-3" id="text-3-5">
+<ul class="org-ul">
+<li>AlphaGo = Subsymbolic (DLNNによる評価関数の学習) + Symbolic (UCT-MCTSによる探索)
+<ul class="org-ul">
+<li>ただし <b>囲碁に特化</b>
+</li>
+<li><b>膨大な棋譜が必要</b> &#x2014; 少数データしかない環境(e.g.宇宙探査機)には適用不可能
+</li>
+</ul>
+</li>
+<li>DQN = DLNN (<b>Subsymbolic</b>) + Reinforcement Learning (<b>Subsymbolic</b>)
+<ul class="org-ul">
+<li>様々な Atari Game につかえる汎用的なフレームワーク (Invader, Packman…) だが
+</li>
+<li>ほとんどのゲームは <b>脊髄反射的な操作で長く生き残ることが出来る</b>
+</li>
+<li><b>Atariゲームに複雑な論理思考能力は必要ない</b> から RL で成功した
+</li>
+<li>実際、 <b>Sokoban など論理思考が求められるAtariゲームでは性能が良くない</b>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="note">
+<p>
+DLNN: Deep Learning Neural Network
+</p>
+
+<p>
+UCT-MCTS: Monte Carlo Tree Search + Universal Confidence Bound applied on Trees
+</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> CV</h2>
+<div class="outline-text-2" id="text-4">
+<div class="xlarge">
+<div class="center">
+<p>
+配布
+</p>
+</div>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> IJCAI投稿内容</h2>
+<div class="outline-text-2" id="text-5">
+<div class="xlarge">
+<div class="center">
+<p>
+Classical Planning in
+</p>
+
+<p>
+Deep Latent Space:
+</p>
+
+<p>
+From Unlabelled Images to PDDL (and back)
+</p>
+</div>
+
+</div>
+</div>
+
+<div id="outline-container-sec-5-1" class="outline-3">
+<h3 id="sec-5-1"><span class="section-number-3">5.1</span> 高度に知的な機械を作るには → DeepLearning + 論理と推論</h3>
+<div class="outline-text-3" id="text-5-1">
+<div class="center">
+<div class="container-fluid">
+<div class="row-fluid">
+<div class="span5">
+<ul class="org-ul">
+<li>ディープラーニングのみ
+
+<p>
+↓
+</p>
+
+<p>
+虫程度の知能を持った
+</p>
+
+<p>
+<b>反射的な機械</b>
+</p>
+</li>
+</ul>
+
+</div>
+<div class="span2">
+<p>
+　
+</p>
+
+<p>
+vs
+</p>
+
+<p>
+　
+</p>
+
+</div>
+<div class="span5">
+<ul class="org-ul">
+<li><b><i>DL + 論理、推論、思考</i></b>
+
+<p>
+↓
+</p>
+
+<p>
+<b><i>目標を達成するために</i></b>
+</p>
+
+<p>
+<b><i>論理で戦略を練る機械</i></b>
+</p>
+</li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+
+<div class="figure">
+<p><img src="img/planning-deeplearning.png" alt="planning-deeplearning.png" />
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-5-2" class="outline-3">
+<h3 id="sec-5-2"><span class="section-number-3">5.2</span> ゴール</h3>
+<div class="outline-text-3" id="text-5-2">
+<div class="xlarge">
+<div class="center">
+<p>
+State of the Art
+</p>
+
+<p>
+Deep Learning 
+</p>
+
+<p>
+＋
+</p>
+
+<p>
+State of the Art
+</p>
+
+<p>
+Classical Planning
+</p>
+</div>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-5-3" class="outline-3">
+<h3 id="sec-5-3"><span class="section-number-3">5.3</span> スライディング タイル パズル (8-Puzzle)</h3>
+<div class="outline-text-3" id="text-5-3">
+<p>
+空きパネルとそれ以外を移動させることで絵を完成させるパズル
+</p>
+
+
+<div class="figure">
+<p><img src="img/static/puzzle.jpg" alt="puzzle.jpg" />
+</p>
+</div>
+
+<div class="alignright">
+<p>
+<b>古典的なAI問題として知られている</b>
+</p>
+
+<p>
+可能な曲面の数は 362880 個
+</p>
+
+<p>
+4x4の15-パズル、5x5の24-パズルはさらに難しい
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-5-4" class="outline-3">
+<h3 id="sec-5-4"><span class="section-number-3">5.4</span> 論文のゴール: 棋譜なし・事前知識なし 訓練画像のみ 完全自動で 8-puzzle を解くAIシステムを作る</h3>
+<div class="outline-text-3" id="text-5-4">
+<p>
+<b>棋譜なし</b> : 棋譜から学習した勘(評価関数)で解くAlphaGoと異なる
+</p>
+
+<p>
+<b>事前知識なし</b> : 「パネル」「9マスある」「パネルが動く」などの事前知識(ラベル、シンボル)は与えられない
+</p>
+
+
+<div class="figure">
+<p><img src="img/static/puzzle.jpg" alt="puzzle.jpg" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-5-5" class="outline-3">
+<h3 id="sec-5-5"><span class="section-number-3">5.5</span> 論文のゴール: 棋譜なし・事前知識なし 訓練画像のみ 完全自動で <b><i>任意の問題</i></b> を解くAIシステムを作る</h3>
+<div class="outline-text-3" id="text-5-5">
+<p>
+<b>8-puzzle だけでなく 任意の問題を解く</b>
+</p>
+
+<div class="container-fluid">
+<div class="row-fluid">
+<div class="span6">
+<p>
+ハノイの塔
+</p>
+
+
+<div class="figure">
+<p><img src="img/static/hanoi.jpg" alt="hanoi.jpg" />
+</p>
+</div>
+
+</div>
+<div class="span6">
+<p>
+Lights-Out
+</p>
+
+
+<div class="figure">
+<p><img src="img/static/lightsout.jpg" alt="lightsout.jpg" />
+</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> </h2>
+<div class="outline-text-2" id="text-6">
+<div class="xlarge">
+<div class="center">
+<p>
+システム概要
+</p>
+</div>
+
+</div>
+</div>
+
+<div id="outline-container-sec-6-1" class="outline-3">
+<h3 id="sec-6-1"><span class="section-number-3">6.1</span> 入力1: Training Inputs &#x2013; Image Pairs</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+実行可能なアクションの例を示す画像ペア
+</p>
+
+
+<div class="figure">
+<p><img src="img/overview/1.png" alt="1.png" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-6-2" class="outline-3">
+<h3 id="sec-6-2"><span class="section-number-3">6.2</span> 入力1: Training Inputs &#x2013; Image Pairs</h3>
+<div class="outline-text-3" id="text-6-2">
+
+<div class="figure">
+<p><img src="img/overview/2.png" alt="2.png" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-6-3" class="outline-3">
+<h3 id="sec-6-3"><span class="section-number-3">6.3</span> 入力2: Planning Inputs &#x2013; Initial Image &amp; Goal Image</h3>
+<div class="outline-text-3" id="text-6-3">
+<p>
+探すべきプランの <b>始点と終点</b> にある2つの状態 を示す画像
+</p>
+
+
+<div class="figure">
+<p><img src="img/overview/input2.png" alt="input2.png" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-6-4" class="outline-3">
+<h3 id="sec-6-4"><span class="section-number-3">6.4</span> 論文のゴール: 棋譜なし・事前知識なし 訓練画像のみ 完全自動で <b><i>任意の問題</i></b> を解くAIシステムを作る</h3>
+<div class="outline-text-3" id="text-6-4">
+<embed src="img/overview/3.svg" type="image/svg+xml"  />
+</div>
+</div>
+
+<div id="outline-container-sec-6-5" class="outline-3">
+<h3 id="sec-6-5"><span class="section-number-3">6.5</span> 実行例 (MNIST 8-puzzle)</h3>
+<div class="outline-text-3" id="text-6-5">
+
+<div class="figure">
+<p><img src="img/mnist-plan.png" alt="mnist-plan.png" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-6-6" class="outline-3">
+<h3 id="sec-6-6"><span class="section-number-3">6.6</span> 実際の問題の例 (Mandrill 8-puzzle)</h3>
+<div class="outline-text-3" id="text-6-6">
+<p>
+MNIST 8-puzzle は 「物体」のようなものが明確に分離されている
+</p>
+
+<p>
+この実験 は このシステムがそのような特性に左右されないことを示す
+</p>
+
+
+<div class="figure">
+<p><img src="img/mandrill-intro.png" alt="mandrill-intro.png" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-6-7" class="outline-3">
+<h3 id="sec-6-7"><span class="section-number-3">6.7</span> 実行例 (Mandrill 8-puzzle)</h3>
+<div class="outline-text-3" id="text-6-7">
+
+<div class="figure">
+<p><img src="img/mandrill-plan.png" alt="mandrill-plan.png" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-6-8" class="outline-3">
+<h3 id="sec-6-8"><span class="section-number-3">6.8</span> 実行例 (Tower of Hanoi)</h3>
+<div class="outline-text-3" id="text-6-8">
+<p>
+全く意味の異なる入力でも解けることを示す
+</p>
+
+
+<div class="figure">
+<p><img src="img/hanoi3.png" alt="hanoi3.png" />
+</p>
+</div>
+
+
+<div class="figure">
+<p><img src="img/hanoi4.png" alt="hanoi4.png" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-6-9" class="outline-3">
+<h3 id="sec-6-9"><span class="section-number-3">6.9</span> 実行例 (Lights Out)</h3>
+<div class="outline-text-3" id="text-6-9">
+<p>
+8-puzzle も hanoi も 「物体」のようなものが「消えない」という性質がある。
+</p>
+
+<p>
+この実験 は このシステムがそのような特性に左右されないことを示す
+</p>
+
+
+<div class="figure">
+<p><img src="img/lights-out.png" alt="lights-out.png" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-6-10" class="outline-3">
+<h3 id="sec-6-10"><span class="section-number-3">6.10</span> 実行例 (Skewed Lights Out)</h3>
+<div class="outline-text-3" id="text-6-10">
+<p>
+8-puzzle, hanoi, LightsOut は 「物体」のようなものが格子状に並んでいる
+</p>
+
+<p>
+この実験 は このシステムがそのような特性に左右されないことを示す
+</p>
+
+
+<div class="figure">
+<p><img src="img/lights-out-skewed.png" alt="lights-out-skewed.png" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-6-11" class="outline-3">
+<h3 id="sec-6-11"><span class="section-number-3">6.11</span> ノイズのある入力にも対応</h3>
+<div class="outline-text-3" id="text-6-11">
+
+<div class="figure">
+<p><img src="img/noise.png" alt="noise.png" />
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7"><span class="section-number-2">7</span> どうやって作ったのか？ 予想された困難</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+基本アイディア: DLNN + Classical Planner
+</p>
+
+<ul class="org-ul">
+<li>1. ラベル無し画像データからなんとかして知識を取り出したい
+
+<ul class="org-ul">
+<li><b>どんな知識をどうやって?</b> ← <b>自明でない</b>
+</li>
+</ul>
+</li>
+
+<li>2. 取り出せたとする。NNで発見される知識は Subsymbolic: 実数値
+
+<ul class="org-ul">
+<li>プランナが必要とするのは Symbolic な入力: 離散値・命題・真偽値
+</li>
+
+<li>システム全体が Unsupervised, 画像入力だけでラベル無し 
+</li>
+
+<li>Subsymbolic を Symbol をどう変換する? (<b>Symbol Grounding</b>) ← <b>自明でない</b>
+</li>
+</ul>
+</li>
+
+<li>3. 仮に自動的に Symbol を 生成したとして
+
+<ul class="org-ul">
+<li>自動的に作られた Symbol は人に理解できる形式ではおそらくない
+</li>
+
+<li><b>機械のSymbolをどうやって人の理解できる形式にするか？</b> ← <b>自明でない</b>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-8" class="outline-2">
+<h2 id="sec-8"><span class="section-number-2">8</span> Latent-space Planner: <b><i>LatPlan</i></b></h2>
+<div class="outline-text-2" id="text-8">
+<p>
+以上 <b>学習</b>, <b>Symbol Grounding</b>, <b>Symbolの解釈</b> を同時に解決し
+</p>
+
+<p>
+生の入力のみから完全自動で <b>任意の問題</b> を解くシステム
+</p>
+
+
+<div class="figure">
+<p><img src="img/planning.png" alt="planning.png" />
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-8-1" class="outline-3">
+<h3 id="sec-8-1"><span class="section-number-3">8.1</span> Autoencoder</h3>
+<div class="outline-text-3" id="text-8-1">
+<div class="center">
+<p>
+<b>教師なし学習</b>
+</p>
+
+<p>
+入力空間 <b>S</b> を Latent Space <b>L</b> に <b>圧縮</b>
+</p>
+
+<p>
+かつ <b>S</b> に <b>展開</b> して <b>元の画像に損失無く戻す。</b>
+</p>
+</div>
+
+<div class="container-fluid">
+<div class="row-fluid">
+<div class="span3">
+<p>
+
+</p>
+
+</div>
+<div class="span6">
+
+<div class="figure">
+<p><img src="img/static/autoenc.png" alt="autoenc.png" />
+</p>
+</div>
+
+</div>
+<div class="span3">
+<p>
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="alignright">
+<p>
+→ <b>データ</b> \(x\) を <b>Latent vector</b> \(z\) に変換/逆変換するNNを学習
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-8-2" class="outline-3">
+<h3 id="sec-8-2"><span class="section-number-3">8.2</span> Deep Autoencoder</h3>
+<div class="outline-text-3" id="text-8-2">
+<p>
+いろいろな追加技術を使うことでDeepにできる → <b>より圧縮できる</b>
+</p>
+
+<p>
+Stacked AE, pretraining, CNN, dropout, Batch-Normalization, GPU&#x2026;
+</p>
+
+
+<div class="figure">
+<p><img src="img/static/deep-ae.png" alt="deep-ae.png" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-8-3" class="outline-3">
+<h3 id="sec-8-3"><span class="section-number-3">8.3</span> State Autoencoder</h3>
+<div class="outline-text-3" id="text-8-3">
+
+<div class="figure">
+<p><img src="img/overview/state-ae.png" alt="state-ae.png" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-8-4" class="outline-3">
+<h3 id="sec-8-4"><span class="section-number-3">8.4</span> Gumbel-Softmax Reparametrization (Jang, Gu, ICLR2017)</h3>
+<div class="outline-text-3" id="text-8-4">
+<p>
+<b>入力をカテゴリカル分布にマップする</b> Activation Function 
+</p>
+
+<div class="center">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="649px" height="206px" version="1.1" content="&lt;mxfile userAgent=&quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36&quot; version=&quot;6.0.1.2&quot; editor=&quot;www.draw.io&quot; type=&quot;google&quot;&gt;&lt;diagram name=&quot;Page-1&quot;&gt;3ZhLc5swEMc/Dcd0kAQCX+O67SGd6TTTaXqU0fJoZcsjy69++oogDBjs0MZ2TONDpL9ey29Xi5BDxrPtR8UW6WfJQTjY5VuHvHcwxshF5l+u7AqF+rgQEpXxQkKV8Jj9Biu6Vl1lHJaNjlpKobNFU4zkfA6RbmhMKblpdoulaK66YAm0hMeIibb6PeM6LdTQdyv9E2RJWq6MXNsyY2VnKyxTxuWmJpGJQ8ZKSl2UZtsxiBxeyaUY9+FI694wBXPdZ0AQh1EYx4xP46kXRHBnZ1gzsbIPaw3Vu/LpN2mm4XHBory+MR52yH2qZ8LUkCnGmRBjKaR67k0AcR8Coy+1kr+g1jKiAWHUtCi5mnPgdrw1AJSG7dGnQntWJshAzkCrneliB5CAFENsfCHPL+qbylt7n6Q1T+HAisxGSLKfu4JoCpZjT6a4xRT71MFUmFXvebY2xSQvfoWHb6VsFqm1tHygUjmbroyR9y944ww08QFN7LktmmEHzPASLEmLpY/wcFiiW2LptVAAN3nOVqXSqUzknIlJpdb2qtuEA9tMP9XKP/Iu7/y8NjeGPtkRz5Wq7SdovbMJnq20NFK17oOUiwb63LzT4M3TyJWK4HT0aKYS0Kd2a9uBCgTT2bq5/mvc4eEIU4xG4PsesCDqCO1z+ufKpBHugZq8FeorRf6VmfdBfiQ9XR45HXbi9kf4zRJ3i2Uw7AOFd0ssw//9JXgseupponu3Ht8MwYEDL+KZ0cDehyeBBqd3BB31B2pn+SIzY0D/KYqYsKMO3LK36N88hc7+1cgZhHHU9dVIoxCm8SW+GukINQm67bSEaEde2otnDX901nAfRGaiPTYSutYJ5uiRdthRfldeot1IlPfI8i9Abcb8AeLYz3+diJ//Xgm1hIg6IHpdEL1LQCxvEwcK0Q4I3IP8+8ZQX/9SuwGoJGxud+STFtSQtpli3/trpqZa3VwX54rq/p9M/gA=&lt;/diagram&gt;&lt;/mxfile&gt;"><defs/><g transform="translate(0.5,0.5)"><rect x="288" y="0.75" width="75" height="202.5" rx="11.25" ry="11.25" fill="#e1d5e7" stroke="#9673a6" pointer-events="none"/><path d="M 243 72 L 273 102 L 243 132 L 213 102 Z" fill="#ffffff" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><g transform="translate(231.5,91.5)scale(0.75)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="30" height="26" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 32px; white-space: nowrap; word-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;">256<div>ReLU</div></div></div></foreignObject><text x="15" y="19" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><path d="M 168 72 L 198 102 L 168 132 L 138 102 Z" fill="#ffffff" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><g transform="translate(156.5,91.5)scale(0.75)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="30" height="26" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 32px; white-space: nowrap; word-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;">512<div>ReLU</div></div></div></foreignObject><text x="15" y="19" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><path d="M 198 102 L 208.22 102" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 212.16 102 L 206.91 104.63 L 208.22 102 L 206.91 99.38 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 120.75 102 L 135.75 102 L 123 102 L 133.22 102" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 137.16 102 L 131.91 104.63 L 133.22 102 L 131.91 99.38 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 273 102 L 288 102 L 273 102 L 283.22 102" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 287.16 102 L 281.91 104.63 L 283.22 102 L 281.91 99.38 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 482.25 72 L 512.25 102 L 482.25 132 L 452.25 102 Z" fill="#ffffff" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><g transform="translate(470.5,91.5)scale(0.75)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="30" height="26" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 32px; white-space: nowrap; word-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;">512<div>ReLU</div></div></div></foreignObject><text x="15" y="19" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><path d="M 407.25 72 L 437.25 102 L 407.25 132 L 377.25 102 Z" fill="#ffffff" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><g transform="translate(395.5,91.5)scale(0.75)"><switch><foreignObject style="overflow:visible;" pointer-events="all" width="30" height="26" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 32px; white-space: nowrap; word-wrap: normal; text-align: center;"><div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;text-align:inherit;text-decoration:inherit;">256<div>ReLU</div></div></div></foreignObject><text x="15" y="19" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">[Not supported by viewer]</text></switch></g><path d="M 437.25 102 L 447.47 102" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 451.41 102 L 446.16 104.63 L 447.47 102 L 446.16 99.38 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 360 102 L 375 102 L 362.25 102 L 372.47 102" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 376.41 102 L 371.16 104.63 L 372.47 102 L 371.16 99.38 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="526.5" y="42" width="120" height="120" rx="18" ry="18" fill="#dae8fc" stroke="#6c8ebf" pointer-events="none"/><path d="M 512.25 102 L 521.72 102" fill="none" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><path d="M 525.66 102 L 520.41 104.63 L 521.72 102 L 520.41 99.38 Z" fill="#000000" stroke="#000000" stroke-miterlimit="10" pointer-events="none"/><rect x="0.75" y="42" width="120" height="120" rx="18" ry="18" fill="#dae8fc" stroke="#6c8ebf" pointer-events="none"/>
+<image xlink:href="https://1.bp.blogspot.com/-OBY7yjnWj9k/WCK6i_l0R9I/AAAAAAAAFLY/jCJwLNuPMecbvAB719g6VhAypmoDH6gswCLcB/s1600/x0.gif" x="8.25" y="49.5" width="105" height="105" fill="#f5f5f5" stroke="#666666" pointer-events="none"/>
+<image xlink:href="https://1.bp.blogspot.com/-WySijJ91Oa8/WCK6jFdXluI/AAAAAAAAFLc/CpaGjhd5lPwUdT6FdGNPQKRlyFhYvcwVQCLcB/s1600/x1.gif" x="534" y="49.5" width="105" height="105" fill="#f5f5f5" stroke="#666666" pointer-events="none"/>
+<image xlink:href="https://1.bp.blogspot.com/-tGqhaoX1a4Y/WCK6izWaixI/AAAAAAAAFLU/QRr6CzXET18_-c8hlx89QOkSQ3HoRH2DwCLcB/s1600/y.gif" x="293.25" y="6.75" width="64.5" height="190.5" fill="#f5f5f5" stroke="#666666" pointer-events="none"/></g></svg>
+</div>
+
+<div class="note">
+<p>
+2/3に採択
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-8-5" class="outline-3">
+<h3 id="sec-8-5"><span class="section-number-3">8.5</span> Gumbel-Softmax</h3>
+<div class="outline-text-3" id="text-8-5">
+<p>
+学習中に温度を下げていくことで <b>始めは自由に学習</b>
+</p>
+
+<p>
+そののち、精度を保ったまま <b>中間層の分布を離散カテゴリカルに近似</b>
+</p>
+
+
+<div class="figure">
+<p><img src="img/static/gumbel.png" alt="gumbel.png" />
+</p>
+</div>
+
+<p>
+\(N\times M\) 行列を出力, \(N\): 変数の数 \(M\): カテゴリの数
+</p>
+
+<div class="alignright">
+<ul class="org-ul">
+<li>\(M=2\) <b>→ N個の命題(true/false)にマップ可能</b>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-8-6" class="outline-3">
+<h3 id="sec-8-6"><span class="section-number-3">8.6</span> State Autoencoder</h3>
+<div class="outline-text-3" id="text-8-6">
+
+<div class="figure">
+<p><img src="img/train-state-ae.png" alt="train-state-ae.png" />
+</p>
+</div>
+
+<ul class="org-ul">
+<li>SAEを学習させることにより以下の関数を得る:
+<ul class="org-ul">
+<li>\(b = Encode(r)\) : <b>生データ \(r\) を boolean vector に変換する関数</b>
+</li>
+<li>\(\tilde{r} = Decode(b)\) : <b>boolean vector \(b\) を 生データ \(\tilde{r}\) に変換する関数</b>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-8-7" class="outline-3">
+<h3 id="sec-8-7"><span class="section-number-3">8.7</span> Entire System</h3>
+<div class="outline-text-3" id="text-8-7">
+
+<div class="figure">
+<p><img src="img/planning.png" alt="planning.png" />
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-9" class="outline-2">
+<h2 id="sec-9"><span class="section-number-2">9</span> 評価</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+GTX1070, PhenomII X6 1060T (3.4GHz overclock), 16GB Mem
+</p>
+
+<dl class="org-dl">
+<dt> Classical Planner </dt><dd>Fast Downward (State-of-the-Art solver, C++)
+</dd>
+
+<dt> State AutoEncoder </dt><dd>Tensorflow, Keras, Adam optimizer (learning rate:0.001)
+
+<p>
+784(84x84)
+</p>
+
+<p>
+→FC(1000,ReLu)→Batchnorm→Dropout(0.4)
+</p>
+
+<p>
+→FC(1000,ReLu)→Batchnorm→Dropout(0.4)
+</p>
+
+<p>
+→FC(25,GumbelSoftmax)
+</p>
+
+<p>
+→FC(1000,ReLu)→Batchnorm→Dropout(0.4)
+</p>
+
+<p>
+→FC(1000,ReLu)→Batchnorm→Dropout(0.4)
+</p>
+
+<p>
+→784(84x84) (loss: Binary crossentropy)
+</p>
+</dd>
+</dl>
+</div>
+
+<div id="outline-container-sec-9-1" class="outline-3">
+<h3 id="sec-9-1"><span class="section-number-3">9.1</span> State AutoEncoder</h3>
+<div class="outline-text-3" id="text-9-1">
+<p>
+1: Train入力 2: 生Latent 3: 生Autoencoding 4: 切り捨てLatent 5: 切り捨てLatentのAutoencoding
+</p>
+
+
+<div class="figure">
+<p><img src="img/static/experiment/autoencoding_train.png" alt="autoencoding_train.png" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-9-2" class="outline-3">
+<h3 id="sec-9-2"><span class="section-number-3">9.2</span> State AutoEncoder</h3>
+<div class="outline-text-3" id="text-9-2">
+<p>
+1: Test入力 2: 生Latent 3: 生Autoencoding 4: 切り捨てLatent 5: 切り捨てLatentのAutoencoding
+</p>
+
+<p>
+Test 入力: 訓練画像に含まれていない画像
+</p>
+
+
+<div class="figure">
+<p><img src="img/static/experiment/autoencoding_test.png" alt="autoencoding_test.png" />
+</p>
+</div>
+
+<div class="alignright">
+<p>
+きちんと学習できている
+</p>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-9-3" class="outline-3">
+<h3 id="sec-9-3"><span class="section-number-3">9.3</span> State AutoEncoder</h3>
+<div class="outline-text-3" id="text-9-3">
+<p>
+入力2: 初期画像とゴール画像
+</p>
+
+
+<div class="figure">
+<p><img src="img/static/experiment/init_goal.png" alt="init_goal.png" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-9-4" class="outline-3">
+<h3 id="sec-9-4"><span class="section-number-3">9.4</span> PDDL Domain Definition</h3>
+<div class="outline-text-3" id="text-9-4">
+<p>
+\(N=25\) の例
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-lisp">(define (domain latent)
+ (<span style="color: #483d8b;">:requirements</span> <span style="color: #483d8b;">:strips</span> <span style="color: #483d8b;">:negative-preconditions</span>)
+ (<span style="color: #483d8b;">:predicates</span> (z0) (z1) (z2) (z3) (z4) (z5) (z6) (z7) (z8) (z9) (z10)
+  (z11) (z12) (z13) (z14) (z15) (z16) (z17) (z18) (z19) (z20) (z21)
+  (z22) (z23) (z24))
+ (<span style="color: #483d8b;">:action</span> a10000010010110111100011111000010001011111110011111
+  <span style="color: #483d8b;">:parameters</span> () <span style="color: #483d8b;">:precondition</span>
+  (and (z0) (not (z1)) (not (z2)) (not (z3)) (not (z4)) (not (z5))
+       (z6) (not (z7)) (not (z8)) (z9) (not (z10)) (z11) (z12)
+       (not (z13)) (z14) (z15) (z16) (z17) (not (z18)) (not (z19))
+       (not (z20)) (z21) (z22) (z23) (z24))
+  <span style="color: #483d8b;">:effect</span> (and (z5) (not (z6)) (z13) (z20)))
+ (<span style="color: #483d8b;">:action</span> a10000010010110111100011110000001001011011110001110
+  ...
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-9-5" class="outline-3">
+<h3 id="sec-9-5"><span class="section-number-3">9.5</span> 人間が書いたドメイン用の枝刈り技術が <i>この未知の自動生成ドメインでも有効</i></h3>
+<div class="outline-text-3" id="text-9-5">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Heuristics</th>
+<th scope="col" class="left">Search Time (sec)</th>
+<th scope="col" class="left">Node Expansion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">MNIST 8-puzzle</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">blind</td>
+<td class="left">1.904</td>
+<td class="left">193924</td>
+</tr>
+
+<tr>
+<td class="left">pdb</td>
+<td class="left"><b>1.780</b></td>
+<td class="left"><b>109096</b></td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">blind</td>
+<td class="left">1.751</td>
+<td class="left">201156</td>
+</tr>
+
+<tr>
+<td class="left">pdb</td>
+<td class="left"><b>1.508</b></td>
+<td class="left"><b>111642</b></td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">blind</td>
+<td class="left">1.657</td>
+<td class="left">186767</td>
+</tr>
+
+<tr>
+<td class="left">pdb</td>
+<td class="left"><b>1.215</b></td>
+<td class="left"><b>84561</b></td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">blind</td>
+<td class="left">1.514</td>
+<td class="left">183336</td>
+</tr>
+
+<tr>
+<td class="left">pdb</td>
+<td class="left"><b>1.474</b></td>
+<td class="left"><b>82518</b></td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">blind</td>
+<td class="left">1.460</td>
+<td class="left">169907</td>
+</tr>
+
+<tr>
+<td class="left">pdb</td>
+<td class="left"><b>0.685</b></td>
+<td class="left"><b>52084</b></td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">blind</td>
+<td class="left">1.489</td>
+<td class="left">130863</td>
+</tr>
+
+<tr>
+<td class="left">pdb</td>
+<td class="left"><b>0.382</b></td>
+<td class="left"><b>26967</b></td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">Hanoi (4 peg)</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">blind</td>
+<td class="left">0.0008</td>
+<td class="left">55</td>
+</tr>
+
+<tr>
+<td class="left">pdb</td>
+<td class="left"><b>0.0006</b></td>
+<td class="left"><b>17</b></td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">LightsOut (4x4)</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">blind</td>
+<td class="left">0.0159</td>
+<td class="left">952</td>
+</tr>
+
+<tr>
+<td class="left">pdb</td>
+<td class="left"><b>0.0013</b></td>
+<td class="left"><b>27</b></td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">Spiral LightsOut (3x3)</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">blind</td>
+<td class="left">0.0040</td>
+<td class="left">522</td>
+</tr>
+
+<tr>
+<td class="left">pdb</td>
+<td class="left"><b>0.0026</b></td>
+<td class="left"><b>214</b></td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">Mandrill 8-puzzle</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">blind</td>
+<td class="left">2.759</td>
+<td class="left">335378</td>
+</tr>
+
+<tr>
+<td class="left">pdb</td>
+<td class="left"><b>1.113</b></td>
+<td class="left"><b>88851</b></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-10" class="outline-2">
+<h2 id="sec-10"><span class="section-number-2">10</span> Conclusion</h2>
+<div class="outline-text-2" id="text-10">
+<ul class="org-ul">
+<li>入力:
+<ul class="org-ul">
+<li>ラベル無しの生の入力データで与えられた状態遷移規則
+</li>
+<li>ラベル無しの初期状態・ゴールを表す画像ペア
+</li>
+</ul>
+</li>
+<li>出力: ゴールを達成するためのプランを表す画像列
+</li>
+
+<li>State AutoEncoder(SAE): Gumbel-Softmaxを用いたVAE
+</li>
+
+<li>主な貢献: <b>SAEによって生データから生成したシンボリック表現を用いてプランニング問題を解けることを実証</b>
+</li>
+
+<li><b>SAE の実装を変えれば(原理的には)画像以外の任意の入力データに対応可能なはず</b>
+
+<ul class="org-ul">
+<li>テキスト用のAE: Li et al. "A hierarchical neural autoencoder for paragraphs and documents." (2015)
+</li>
+<li>音声用のAE: Deng, Li, et al. "Binary coding of speech spectrograms using a deep auto-encoder." Interspeech. 2010.
+</li>
+
+<li><b>Here's an Apple, Here's a pen → oh, ApplePen!</b>
+</li>
+<li>SAEを学習してプランナで解く → <b>数千ステップの高速な言語レベル推論が可能に</b>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-11" class="outline-2">
+<h2 id="sec-11"><span class="section-number-2">11</span> 今日のメッセージ</h2>
+<div class="outline-text-2" id="text-11">
+<div class="center">
+<p>
+目標:
+</p>
+
+<p>
+　 <b>ルールベース人口無能を超える 論理を備えた 真に知的なチャットボット</b>
+</p>
+
+<p>
+NLPエキスパートと 探索エキスパートの力を合わせて このシステムを作ってみませんか？
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Masataro Asai</p>
+<p class="date">Created: 2017-03-16 木 14:40</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.5.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
